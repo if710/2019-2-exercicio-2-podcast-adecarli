@@ -115,7 +115,10 @@ object Parser {
             } else if (name == "description") {
                 description = readData(parser, "description")
             } else if (name == "enclosure") {
-                downloadLink = parser.getAttributeValue(null, " url")
+                // Le o link de download do episodio e pula o parser para proxima tag,
+                // pois não há tag </enclosure>
+                downloadLink = parser.getAttributeValue(null, "url")
+                skip(parser)
             } else {
                 skip(parser)
             }
