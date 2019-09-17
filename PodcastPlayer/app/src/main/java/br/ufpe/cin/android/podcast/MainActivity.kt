@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        val db = ItemsDB.getDatabase(this)
         // Carrega de maneira assíncrona o arquivo XML
         doAsync {
             val xmlContent = URL("https://s3-us-west-1.amazonaws.com/podcasts.thepolyglotdeveloper.com/podcast.xml").readText()
@@ -24,6 +24,11 @@ class MainActivity : AppCompatActivity() {
                 listRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
                 listRecyclerView.adapter = ItemFeedAdapter(itemFeedList, this@MainActivity)
                 listRecyclerView.addItemDecoration(DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL))
+            }
+            // Armazena os episodios carregados no banco de dados
+            for (item in itemFeedList) {
+                db.itemsDAO().inserirItem(item)
+                println(item)
             }
         }
     }
